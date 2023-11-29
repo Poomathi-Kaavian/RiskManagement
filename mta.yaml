@@ -2,14 +2,17 @@ _schema-version: '3.1'
 ID: risk-management
 version: 3.0.0
 description: "Template for the Learning Journey Building side-by-side extensions on SAP BTP"
+
 parameters:
   enable-parallel-deployments: true
+
 build-parameters:
   before-all:
     - builder: custom
       commands:
-        - npm install --production
+        - npm ci
         - npx cds build --production
+
 modules:
   - name: risk-management-srv
     type: nodejs
@@ -19,7 +22,7 @@ modules:
     build-parameters:
       builder: npm
     provides:
-      - name: srv-api # required by consumers of CAP services (e.g. approuter)
+      - name: srv-api
         properties:
           srv-url: ${default-url}
     requires:
@@ -46,7 +49,7 @@ modules:
       - name: srv-api
         group: destinations
         properties:
-          name: srv-api # must be used in xs-app.json as well
+          name: srv-api
           url: ~{srv-url}
           forwardAuthToken: true
       - name: risk-management-auth
@@ -62,23 +65,24 @@ resources:
         xsappname: risk-management-${org}-${space}
         tenant-mode: dedicated
         role-collections:
-        - name: 'RiskManager-${org}-${space}'
-          description: Manage Risks
-          role-template-references:
-          - $XSAPPNAME.RiskManager
-        - name: 'RiskViewer-${org}-${space}'
-          description: View Risks
-          role-template-references:
-          - $XSAPPNAME.RiskViewer
+          - name: 'RiskManager-${org}-${space}'
+            description: Manage Risks
+            role-template-references:
+              - $XSAPPNAME.RiskManager
+          - name: 'RiskViewer-${org}-${space}'
+            description: View Risks
+            role-template-references:
+              - $XSAPPNAME.RiskViewer
         oauth2-configuration:
           redirect-uris:
-            - https://3f626dfftrial-dev-risk-management.cfapps.us10-001.hana.ondemand.com/login/callback # Wildcard redirect to SAP BTP (You might want to make this more exclusive)
-            # example: - https://risk-management-approuter.cfapps.eu10-004.hana.ondemand.com/login/callback
+            - https://3f626dfftrial-dev-risk-management.cfapps.us10-001.hana.ondemand.com/login/callback
+
   - name: risk-management-db
     type: com.sap.xs.hdi-container
     parameters:
       service: hana
       service-plan: hdi-shared
+
   - name: risk-management-destination
     type: org.cloudfoundry.managed-service
     parameters:
