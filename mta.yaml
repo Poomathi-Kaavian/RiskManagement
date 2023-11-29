@@ -9,6 +9,7 @@ build-parameters:
     - builder: custom
       commands:
         - npx cds build --production
+        - npm install --production
 modules:
   - name: risk-management-srv
     type: nodejs
