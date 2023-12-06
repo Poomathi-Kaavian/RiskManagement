@@ -27,7 +27,13 @@ service RiskService @(requires: 'authenticated-user') {
       to   : 'RiskViewer'
     },
     {
-      grant: '*', // Allow everything using wildcard
+       grant: [
+        'READ',
+        'WRITE',
+        'UPDATE',
+        'UPSERT',
+        'DELETE'
+      ], // Allow everything using wildcard
       to   : 'RiskManager'
     }
   ])                      as projection on rm.Mitigations;

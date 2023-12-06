@@ -10,7 +10,7 @@ annotate service.Risks with @(
         {
             $Type : 'UI.DataField',
             Value : miti.descr,
-            Label : 'Mitigation',
+            Label : '{i18n>Mitigation}',
         },
         {
             $Type : 'UI.DataField',
