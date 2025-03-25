@@ -30,8 +30,8 @@ annotate service.Risks with @(
             Criticality : criticality,
         },
         {
-            $Type : 'UI.DataFieldForAnnotation',
-            Target : 'bp/@Communication.Contact#contact',
+            $Type : 'UI.DataField',
+            Value : bp_BusinessPartner,
             Label : 'Business Partner',
         },
     ]
@@ -171,8 +171,8 @@ annotate service.Risks with @(
                 Criticality : criticality,
             },
             {
-                $Type : 'UI.DataFieldForAnnotation',
-                Target : 'bp/@Communication.Contact#contact1',
+                $Type : 'UI.DataField',
+                Value : bp_BusinessPartner,
                 Label : 'Business Partner',
             },],
     }
@@ -249,3 +249,26 @@ annotate service.BusinessPartners with @(
         fn : FullName,
     }
 );
+annotate service.Risks with {
+    bp @(
+        Common.Text : bp.FullName,
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'BusinessPartners',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : bp_BusinessPartner,
+                    ValueListProperty : 'BusinessPartner',
+                },
+            ],
+            Label : 'Business Partner',
+        },
+        Common.ValueListWithFixedValues : true,
+    )
+};
+
+annotate service.BusinessPartners with {
+    BusinessPartner @Common.Text : FullName
+};
+
